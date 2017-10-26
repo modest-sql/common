@@ -86,6 +86,11 @@ type CreateTableCommand struct {
 	tableColumnDefiners TableColumnDefiners
 }
 
+//NewCreateTableCommand creates an instance of CreateTableCommand.
+func NewCreateTableCommand(tableName string, tableColumnDefiners TableColumnDefiners) *CreateTableCommand {
+	return &CreateTableCommand{tableName, tableColumnDefiners}
+}
+
 //TableName returns the name of the table to be created.
 func (c CreateTableCommand) TableName() string {
 	return c.tableName
@@ -94,4 +99,49 @@ func (c CreateTableCommand) TableName() string {
 //TableColumnDefiners returns all column definitions of the table.
 func (c CreateTableCommand) TableColumnDefiners() TableColumnDefiners {
 	return c.tableColumnDefiners
+}
+
+//TableColumnSelectors is an array of TableColumnSelector and TableColumnStarSelector.
+type TableColumnSelectors []interface{}
+
+//TableColumnSelector represents a selected column in a select query.
+type TableColumnSelector struct {
+	prefix     string
+	columnName string
+	alias      string
+}
+
+//NewTableColumnSelector creates an instance of a TableColumnSelector.
+func NewTableColumnSelector(prefix, columnName, alias string) *TableColumnSelector {
+	return &TableColumnSelector{prefix, columnName, alias}
+}
+
+//Prefix returns the column prefix and returns true if it isn't empty.
+func (s TableColumnSelector) Prefix() (string, bool) {
+	return s.prefix, len(s.prefix) > 0
+}
+
+//ColumnName returns the name of the selected column in a select query.
+func (s TableColumnSelector) ColumnName() string {
+	return s.columnName
+}
+
+//Alias returns the column alias and returns true if it isn't empty.
+func (s TableColumnSelector) Alias() (string, bool) {
+	return s.alias, len(s.alias) > 0
+}
+
+//TableColumnStarSelector represents a star selector in a select query.
+type TableColumnStarSelector struct {
+}
+
+//NewTableColumnStarSelector creates an instance of TableColumnStarSelector.
+func NewTableColumnStarSelector() *TableColumnStarSelector {
+	return &TableColumnStarSelector{}
+}
+
+//SelectTableCommand represents a select from table query.
+type SelectTableCommand struct {
+	sourceTable          string
+	tableColumnSelectors TableColumnSelectors
 }
