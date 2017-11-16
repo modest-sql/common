@@ -156,6 +156,10 @@ type SelectTableCommand struct {
 	tableColumnSelectors TableColumnSelectors
 }
 
+func (s SelectTableCommand) SourceTable() string {
+	return s.sourceTable
+}
+
 //InsertCommand represents an insert statement.
 type InsertCommand struct {
 	tableName string
