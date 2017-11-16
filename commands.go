@@ -155,3 +155,24 @@ type SelectTableCommand struct {
 	sourceTable          string
 	tableColumnSelectors TableColumnSelectors
 }
+
+//InsertCommand represents an insert statement.
+type InsertCommand struct {
+	tableName string
+	values    map[string]interface{}
+}
+
+//NewInsertCommand returns an instance of an InsertCommand.
+func NewInsertCommand(tableName string, values map[string]interface{}) *InsertCommand {
+	return &InsertCommand{tableName, values}
+}
+
+//TableName returns the name of the table in which the values will be inserted.
+func (i InsertCommand) TableName() string {
+	return i.tableName
+}
+
+//Values returns a map in which the keys are the columns in which the values will be inserted.
+func (i InsertCommand) Values() map[string]interface{} {
+	return i.values
+}
