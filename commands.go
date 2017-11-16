@@ -40,8 +40,18 @@ type IntegerTableColumn struct {
 }
 
 //NewIntegerTableColumn creates an instance of IntegerTableColumn.
-func NewIntegerTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) *IntegerTableColumn {
-	return &IntegerTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
+func NewIntegerTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) IntegerTableColumn {
+	return IntegerTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
+}
+
+//IntegerTableColumn represents the definition of an integer table column.
+type FloatTableColumn struct {
+	baseTableColumn
+}
+
+//NewIntegerTableColumn creates an instance of IntegerTableColumn.
+func NewFloatTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) FloatTableColumn {
+	return FloatTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
 }
 
 //BooleanTableColumn represents the definition of a boolean table column.
@@ -50,8 +60,8 @@ type BooleanTableColumn struct {
 }
 
 //NewBooleanTableColumn creates an instance of BooleanTableColumn.
-func NewBooleanTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) *BooleanTableColumn {
-	return &BooleanTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
+func NewBooleanTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) BooleanTableColumn {
+	return BooleanTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
 }
 
 //DatetimeTableColumn repesents the definition of a datetime table column.
@@ -60,8 +70,8 @@ type DatetimeTableColumn struct {
 }
 
 //NewDatetimeTableColumn creates an instance of DatetimeTableColumn.
-func NewDatetimeTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) *DatetimeTableColumn {
-	return &DatetimeTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
+func NewDatetimeTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) DatetimeTableColumn {
+	return DatetimeTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
 }
 
 //CharTableColumn represents the definition of a char table column.
@@ -71,8 +81,8 @@ type CharTableColumn struct {
 }
 
 //NewCharTableColumn creates an instance of CharTableColumn.
-func NewCharTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, size int) *CharTableColumn {
-	return &CharTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}, size}
+func NewCharTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, size int) CharTableColumn {
+	return CharTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}, size}
 }
 
 //Size returns the amount of bytes the char table column will consume.
