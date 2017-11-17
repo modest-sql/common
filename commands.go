@@ -156,6 +156,11 @@ type SelectTableCommand struct {
 	tableColumnSelectors TableColumnSelectors
 }
 
+//NewSelectTableCommand returns an instance of SelectTableCommand.
+func NewSelectTableCommand(sourceTable string) *SelectTableCommand {
+	return &SelectTableCommand{sourceTable: sourceTable}
+}
+
 func (s SelectTableCommand) SourceTable() string {
 	return s.sourceTable
 }
