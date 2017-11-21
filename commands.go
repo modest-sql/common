@@ -44,12 +44,12 @@ func NewIntegerTableColumn(columnName string, defaultValue interface{}, nullable
 	return IntegerTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
 }
 
-//IntegerTableColumn represents the definition of an integer table column.
+//FloatTableColumn represents the definition of an float table column.
 type FloatTableColumn struct {
 	baseTableColumn
 }
 
-//NewIntegerTableColumn creates an instance of IntegerTableColumn.
+//NewFloatTableColumn creates an instance of FloatTableColumn.
 func NewFloatTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) FloatTableColumn {
 	return FloatTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
 }
@@ -161,6 +161,7 @@ func NewSelectTableCommand(sourceTable string) *SelectTableCommand {
 	return &SelectTableCommand{sourceTable: sourceTable}
 }
 
+//SourceTable returns the sourceTable of the table in which the values will be inserted.
 func (s SelectTableCommand) SourceTable() string {
 	return s.sourceTable
 }
@@ -184,4 +185,60 @@ func (i InsertCommand) TableName() string {
 //Values returns a map in which the keys are the columns in which the values will be inserted.
 func (i InsertCommand) Values() map[string]interface{} {
 	return i.values
+}
+
+//DropCommand represents an drop statement.
+type DropCommand struct {
+	tableName string
+}
+
+//NewDropCommand returns an instance of an DropCommand
+func NewDropCommand(tableName string) *DropCommand {
+	return &DropCommand{tableName}
+}
+
+//TableName returns the name of the table in which the values will be inserted.
+func (i DropCommand) TableName() string {
+	return i.tableName
+}
+
+//AlterCommand represents an alter statement.
+type AlterCommand struct {
+	table       string
+	instruction interface{}
+}
+
+//NewAlterCommand returns an instance of an AlterCommand
+func NewAlterCommand(tableName string, instruction interface{}) *AlterCommand {
+	return &AlterCommand{tableName, instruction}
+}
+
+//AlterDropInst represents an alter drop instruction.
+type AlterDropInst struct {
+	table string
+}
+
+//NewAlterDropInst returns an instance of an AlterDropInst
+func NewAlterDropInst(tableName string) *AlterDropInst {
+	return &AlterDropInst{tableName}
+}
+
+//AlterAddInst represents an alter add instruction.
+type AlterAddInst struct {
+	tableColumnDefiners TableColumnDefiner
+}
+
+//NewAlterAddInst returns an instance of an AlterAddInst
+func NewAlterAddInst(tableColumnDefiners TableColumnDefiner) *AlterAddInst {
+	return &AlterAddInst{tableColumnDefiners}
+}
+
+//AlterModifyInst represents an modify add instruction.
+type AlterModifyInst struct {
+	tableColumnDefiners TableColumnDefiner
+}
+
+//NewAlterModifyInst returns an instance of an AlterModifyInst
+func NewAlterModifyInst(tableColumnDefiners TableColumnDefiner) *AlterModifyInst {
+	return &AlterModifyInst{tableColumnDefiners}
 }
