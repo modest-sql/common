@@ -185,3 +185,26 @@ func (i InsertCommand) TableName() string {
 func (i InsertCommand) Values() map[string]interface{} {
 	return i.values
 }
+
+//Instruction executes the command.
+type Instruction func() (interface{}, error)
+
+//InstructionType is used to determine the type of the instruction.
+type InstructionType int
+
+//Instruction type constants.
+const (
+	Create InstructionType = iota
+	Select
+	Update
+	Insert
+	Delete
+	Drop
+	Alter
+)
+
+//Command contains information about the instruction type and the instruction itself.
+type Command struct {
+	InstructionType
+	Instruction
+}
