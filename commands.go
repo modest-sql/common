@@ -203,6 +203,20 @@ const (
 	Alter
 )
 
+var instructionName = map[InstructionType]string{
+	Create: "CREATE",
+	Select: "SELECT",
+	Update: "UPDATE",
+	Insert: "INSERT",
+	Delete: "DELETE",
+	Drop:   "DROP",
+	Alter:  "ALTER",
+}
+
+func (i InstructionType) String() string {
+	return instructionName[i]
+}
+
 //Command contains information about the instruction type and the instruction itself.
 type Command struct {
 	InstructionType
