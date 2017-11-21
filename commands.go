@@ -77,16 +77,16 @@ func NewDatetimeTableColumn(columnName string, defaultValue interface{}, nullabl
 //CharTableColumn represents the definition of a char table column.
 type CharTableColumn struct {
 	baseTableColumn
-	size int
+	size uint32
 }
 
 //NewCharTableColumn creates an instance of CharTableColumn.
-func NewCharTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, size int) CharTableColumn {
+func NewCharTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, size uint32) CharTableColumn {
 	return CharTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}, size}
 }
 
 //Size returns the amount of bytes the char table column will consume.
-func (c CharTableColumn) Size() int {
+func (c CharTableColumn) Size() uint32 {
 	return c.size
 }
 
