@@ -1,5 +1,11 @@
 package common
 
+import "fmt"
+
+type tableModifier interface {
+	TableName() string
+}
+
 //TableColumnDefiners is an array of TableColumnDefiner
 type TableColumnDefiners []TableColumnDefiner
 
@@ -152,17 +158,17 @@ func NewTableColumnStarSelector() *TableColumnStarSelector {
 
 //SelectTableCommand represents a select from table query.
 type SelectTableCommand struct {
-	sourceTable          string
+	tableName            string
 	tableColumnSelectors TableColumnSelectors
 }
 
 //NewSelectTableCommand returns an instance of SelectTableCommand.
-func NewSelectTableCommand(sourceTable string) *SelectTableCommand {
-	return &SelectTableCommand{sourceTable: sourceTable}
+func NewSelectTableCommand(tableName string) *SelectTableCommand {
+	return &SelectTableCommand{tableName: tableName}
 }
 
-func (s SelectTableCommand) SourceTable() string {
-	return s.sourceTable
+func (s SelectTableCommand) TableName() string {
+	return s.tableName
 }
 
 //InsertCommand represents an insert statement.
@@ -184,6 +190,38 @@ func (i InsertCommand) TableName() string {
 //Values returns a map in which the keys are the columns in which the values will be inserted.
 func (i InsertCommand) Values() map[string]interface{} {
 	return i.values
+}
+
+type UpdateTableCommand struct {
+	tableName string
+}
+
+func (c UpdateTableCommand) TableName() string {
+	return c.tableName
+}
+
+type DeleteCommand struct {
+	tableName string
+}
+
+func (c DeleteCommand) TableName() string {
+	return c.tableName
+}
+
+type DropTableCommand struct {
+	tableName string
+}
+
+func (c DropTableCommand) TableName() string {
+	return c.tableName
+}
+
+type AlterTableCommand struct {
+	tableName string
+}
+
+func (c AlterTableCommand) TableName() string {
+	return c.tableName
 }
 
 //Instruction executes the command.
@@ -219,6 +257,11 @@ func (i InstructionType) String() string {
 
 //Command contains information about the instruction type and the instruction itself.
 type Command struct {
+	tableModifier
 	InstructionType
 	Instruction
+}
+
+func (c Command) String() string {
+	return fmt.Sprintf("%s %s", c.InstructionType.String(), c.tableModifier.TableName())
 }
