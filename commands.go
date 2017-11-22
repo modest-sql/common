@@ -225,7 +225,7 @@ func (c AlterTableCommand) TableName() string {
 }
 
 //Instruction executes the command.
-type Instruction func() (interface{}, error)
+type Instruction func()
 
 //InstructionType is used to determine the type of the instruction.
 type InstructionType int
@@ -260,6 +260,10 @@ type Command struct {
 	tableModifier
 	InstructionType
 	Instruction
+}
+
+func NewCommand(tableModifier tableModifier, instructionType InstructionType, instruction Instruction) Command {
+	return Command{tableModifier, instructionType, instruction}
 }
 
 func (c Command) String() string {
