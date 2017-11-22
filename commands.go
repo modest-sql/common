@@ -1,5 +1,11 @@
 package common
 
+import "fmt"
+
+type tableModifier interface {
+	TableName() string
+}
+
 //TableColumnDefiners is an array of TableColumnDefiner
 type TableColumnDefiners []TableColumnDefiner
 
@@ -152,19 +158,19 @@ func NewTableColumnStarSelector() *TableColumnStarSelector {
 
 //SelectTableCommand represents a select from table query.
 type SelectTableCommand struct {
-	sourceTable          string
+	tableName            string
 	tableColumnSelectors TableColumnSelectors
 }
 
 //NewSelectTableCommand returns an instance of SelectTableCommand.
-func NewSelectTableCommand(sourceTable string) *SelectTableCommand {
-	return &SelectTableCommand{sourceTable: sourceTable}
+func NewSelectTableCommand(tableName string) *SelectTableCommand {
+	return &SelectTableCommand{tableName: tableName}
 }
+
 
 //SourceTable returns the sourceTable of the table in which the values will be inserted.
 func (s SelectTableCommand) SourceTable() string {
 	return s.sourceTable
-}
 
 //InsertCommand represents an insert statement.
 type InsertCommand struct {
@@ -186,6 +192,7 @@ func (i InsertCommand) TableName() string {
 func (i InsertCommand) Values() map[string]interface{} {
 	return i.values
 }
+
 
 //DropCommand represents an drop statement.
 type DropCommand struct {
@@ -241,4 +248,66 @@ type AlterModifyInst struct {
 //NewAlterModifyInst returns an instance of an AlterModifyInst
 func NewAlterModifyInst(tableColumnDefiners TableColumnDefiner) *AlterModifyInst {
 	return &AlterModifyInst{tableColumnDefiners}
+
+type UpdateTableCommand struct {
+	tableName string
+}
+
+func (c UpdateTableCommand) TableName() string {
+	return c.tableName
+}
+
+type DeleteCommand struct {
+	tableName string
+}
+
+func (c DeleteCommand) TableName() string {
+	return c.tableName
+}
+
+//Instruction executes the command.
+type Instruction func()
+
+//InstructionType is used to determine the type of the instruction.
+type InstructionType int
+
+//Instruction type constants.
+const (
+	Create InstructionType = iota
+	Select
+	Update
+	Insert
+	Delete
+	Drop
+	Alter
+)
+
+var instructionName = map[InstructionType]string{
+	Create: "CREATE",
+	Select: "SELECT",
+	Update: "UPDATE",
+	Insert: "INSERT",
+	Delete: "DELETE",
+	Drop:   "DROP",
+	Alter:  "ALTER",
+}
+
+func (i InstructionType) String() string {
+	return instructionName[i]
+}
+
+//Command contains information about the instruction type and the instruction itself.
+type Command struct {
+	tableModifier
+	InstructionType
+	Instruction
+}
+
+func NewCommand(tableModifier tableModifier, instructionType InstructionType, instruction Instruction) Command {
+	return Command{tableModifier, instructionType, instruction}
+}
+
+func (c Command) String() string {
+	return fmt.Sprintf("%s %s", c.InstructionType.String(), c.tableModifier.TableName())
+
 }
