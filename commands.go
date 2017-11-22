@@ -311,3 +311,208 @@ func (c Command) String() string {
 	return fmt.Sprintf("%s %s", c.InstructionType.String(), c.tableModifier.TableName())
 
 }
+
+type IdCommon struct {
+	name  string
+	alias string
+}
+
+func NewIdCommon(tableName string, alias string) *IdCommon {
+	return &IdCommon{tableName, alias}
+}
+
+type IntCommon struct {
+	value int64
+}
+
+func NewIntCommon(value int64) *IntCommon {
+	return &IntCommon{value}
+}
+
+type BoolCommon struct {
+	value bool
+}
+
+func NewBoolCommon(value bool) *BoolCommon {
+	return &BoolCommon{value}
+}
+
+type FloatCommon struct {
+	value float64
+}
+
+func NewFloatCommon(value float64) *FloatCommon {
+	return &FloatCommon{value}
+}
+
+type StringCommon struct {
+	value string
+}
+
+func NewStringCommon(value string) *StringCommon {
+	return &StringCommon{value}
+}
+
+type AssignmentCommon struct {
+	value      string
+	expression interface{}
+}
+
+func NewAssignmentCommon(value string, expression interface{}) *AssignmentCommon {
+	return &AssignmentCommon{value, expression}
+}
+
+type SumCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewSumCommon(value interface{}, expression interface{}) *SumCommon {
+	return &SumCommon{value, expression}
+}
+
+type SubCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewSubCommon(value interface{}, expression interface{}) *SubCommon {
+	return &SubCommon{value, expression}
+}
+
+type MultCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewMultCommon(value interface{}, expression interface{}) *MultCommon {
+	return &MultCommon{value, expression}
+}
+
+type DivCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewDivCommon(value interface{}, expression interface{}) *DivCommon {
+	return &DivCommon{value, expression}
+}
+
+type EqCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewEqCommon(value interface{}, expression interface{}) *EqCommon {
+	return &EqCommon{value, expression}
+}
+
+type NeCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewNeCommon(value interface{}, expression interface{}) *NeCommon {
+	return &NeCommon{value, expression}
+}
+
+type LtCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewLtCommon(value interface{}, expression interface{}) *LtCommon {
+	return &LtCommon{value, expression}
+}
+
+type GtCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewGtCommon(value interface{}, expression interface{}) *GtCommon {
+	return &GtCommon{value, expression}
+}
+
+type LteCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewLteCommon(value interface{}, expression interface{}) *LteCommon {
+	return &LteCommon{value, expression}
+}
+
+type GteCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewGteCommon(value interface{}, expression interface{}) *GteCommon {
+	return &GteCommon{value, expression}
+}
+
+type BetweenCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewBetweenCommon(value interface{}, expression interface{}) *BetweenCommon {
+	return &BetweenCommon{value, expression}
+}
+
+type LikeCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewLikeCommon(value interface{}, expression interface{}) *LikeCommon {
+	return &LikeCommon{value, expression}
+}
+
+type NotCommon struct {
+	not interface{}
+}
+
+func NewNotCommon(value interface{}) *NotCommon {
+	return &NotCommon{value}
+}
+
+type AndCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewAndCommon(value interface{}, expression interface{}) *AndCommon {
+	return &AndCommon{value, expression}
+}
+
+type OrCommon struct {
+	rightValue interface{}
+	leftValue  interface{}
+}
+
+func NewOrCommon(value interface{}, expression interface{}) *OrCommon {
+	return &OrCommon{value, expression}
+}
+
+type NullCommon struct {
+}
+
+func NewNullCommon() *NullCommon {
+	return &NullCommon{}
+}
+
+type FalseCommon struct {
+}
+
+func NewFalseCommon() *FalseCommon {
+	return &FalseCommon{}
+}
+
+type TrueCommon struct {
+}
+
+func NewTrueCommon() *TrueCommon {
+	return &TrueCommon{}
+}
