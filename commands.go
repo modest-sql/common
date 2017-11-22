@@ -167,10 +167,10 @@ func NewSelectTableCommand(tableName string) *SelectTableCommand {
 	return &SelectTableCommand{tableName: tableName}
 }
 
-
 //SourceTable returns the sourceTable of the table in which the values will be inserted.
-func (s SelectTableCommand) SourceTable() string {
-	return s.sourceTable
+func (s SelectTableCommand) TableName() string {
+	return s.tableName
+}
 
 //InsertCommand represents an insert statement.
 type InsertCommand struct {
@@ -192,7 +192,6 @@ func (i InsertCommand) TableName() string {
 func (i InsertCommand) Values() map[string]interface{} {
 	return i.values
 }
-
 
 //DropCommand represents an drop statement.
 type DropCommand struct {
@@ -248,6 +247,7 @@ type AlterModifyInst struct {
 //NewAlterModifyInst returns an instance of an AlterModifyInst
 func NewAlterModifyInst(tableColumnDefiners TableColumnDefiner) *AlterModifyInst {
 	return &AlterModifyInst{tableColumnDefiners}
+}
 
 type UpdateTableCommand struct {
 	tableName string
