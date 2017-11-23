@@ -14,6 +14,7 @@ type TableColumnDefiner interface {
 	ColumnName() string
 	DefaultValue() interface{}
 	Nullable() bool
+	Autoincrementable() bool
 	PrimaryKey() bool
 	ForeignKey() bool
 }
