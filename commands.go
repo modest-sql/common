@@ -14,7 +14,8 @@ type TableColumnDefiner interface {
 	ColumnName() string
 	DefaultValue() interface{}
 	Nullable() bool
-	Autoincrementable() bool
+	PrimaryKey() bool
+	ForeignKey() bool
 }
 
 type baseTableColumn struct {
@@ -22,6 +23,8 @@ type baseTableColumn struct {
 	defaultValue      interface{}
 	nullable          bool
 	autoincrementable bool
+	primaryKey        bool
+	foreignKey        bool
 }
 
 func (c baseTableColumn) ColumnName() string {
@@ -40,14 +43,22 @@ func (c baseTableColumn) Autoincrementable() bool {
 	return c.autoincrementable
 }
 
+func (c baseTableColumn) PrimaryKey() bool {
+	return c.primaryKey
+}
+
+func (c baseTableColumn) ForeignKey() bool {
+	return c.foreignKey
+}
+
 //IntegerTableColumn represents the definition of an integer table column.
 type IntegerTableColumn struct {
 	baseTableColumn
 }
 
 //NewIntegerTableColumn creates an instance of IntegerTableColumn.
-func NewIntegerTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) IntegerTableColumn {
-	return IntegerTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
+func NewIntegerTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, primaryKey bool, foreignKey bool) IntegerTableColumn {
+	return IntegerTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable, primaryKey, foreignKey}}
 }
 
 //FloatTableColumn represents the definition of an float table column.
@@ -56,8 +67,8 @@ type FloatTableColumn struct {
 }
 
 //NewFloatTableColumn creates an instance of FloatTableColumn.
-func NewFloatTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) FloatTableColumn {
-	return FloatTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
+func NewFloatTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, primaryKey bool, foreignKey bool) FloatTableColumn {
+	return FloatTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable, primaryKey, foreignKey}}
 }
 
 //BooleanTableColumn represents the definition of a boolean table column.
@@ -66,8 +77,8 @@ type BooleanTableColumn struct {
 }
 
 //NewBooleanTableColumn creates an instance of BooleanTableColumn.
-func NewBooleanTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) BooleanTableColumn {
-	return BooleanTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
+func NewBooleanTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, primaryKey bool, foreignKey bool) BooleanTableColumn {
+	return BooleanTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable, primaryKey, foreignKey}}
 }
 
 //DatetimeTableColumn repesents the definition of a datetime table column.
@@ -76,8 +87,8 @@ type DatetimeTableColumn struct {
 }
 
 //NewDatetimeTableColumn creates an instance of DatetimeTableColumn.
-func NewDatetimeTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool) DatetimeTableColumn {
-	return DatetimeTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}}
+func NewDatetimeTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, primaryKey bool, foreignKey bool) DatetimeTableColumn {
+	return DatetimeTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable, primaryKey, foreignKey}}
 }
 
 //CharTableColumn represents the definition of a char table column.
@@ -87,8 +98,8 @@ type CharTableColumn struct {
 }
 
 //NewCharTableColumn creates an instance of CharTableColumn.
-func NewCharTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, size uint16) CharTableColumn {
-	return CharTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable}, size}
+func NewCharTableColumn(columnName string, defaultValue interface{}, nullable, autoincrementable bool, primaryKey bool, foreignKey bool, size uint16) CharTableColumn {
+	return CharTableColumn{baseTableColumn{columnName, defaultValue, nullable, autoincrementable, primaryKey, foreignKey}, size}
 }
 
 //Size returns the amount of bytes the char table column will consume.
