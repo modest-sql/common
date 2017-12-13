@@ -277,11 +277,12 @@ func NewUpdateTableCommand(tableName string, assignments []AssignmentCommon, whe
 
 type DeleteCommand struct {
 	tableName string
+	alias string
 	where interface{}
 }
 
-func NewDeleteTableCommand(tableName string, where interface{}) *DeleteTableCommand{
-	return &DeleteTableCommand{tableName, where}
+func NewDeleteTableCommand(tableName string, alias string, where interface{}) *DeleteTableCommand{
+	return &DeleteTableCommand{tableName, alias, where}
 }
 func (c DeleteCommand) TableName() string {
 	return c.tableName
