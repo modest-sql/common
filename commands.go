@@ -134,14 +134,16 @@ type TableColumnSelectors []interface{}
 
 //TableColumnSelector represents a selected column in a select query.
 type TableColumnSelector struct {
+	isStar bool
 	prefix     string
 	columnName string
 	alias      string
+	function interface{}
 }
 
 //NewTableColumnSelector creates an instance of a TableColumnSelector.
-func NewTableColumnSelector(prefix, columnName, alias string) *TableColumnSelector {
-	return &TableColumnSelector{prefix, columnName, alias}
+func NewTableColumnSelector(isStar bool,prefix string, columnName string, alias string,function interface{}) *TableColumnSelector {
+	return &TableColumnSelector{isStar,prefix, columnName, alias,function}
 }
 
 //Prefix returns the column prefix and returns true if it isn't empty.
@@ -168,15 +170,38 @@ func NewTableColumnStarSelector() *TableColumnStarSelector {
 	return &TableColumnStarSelector{}
 }
 
+
+type GroupBySelect struct{
+	table string
+	column  string
+}
+
+//NewTableColumnSelector creates an instance of a TableColumnSelector.
+func NewGroupBySelect(table string,column  string) *GroupBySelect {
+	return &GroupBySelect{table ,column}
+}
+type JoinSelect struct {
+	targetTable string
+	targetAlias string
+	filterCriteria interface{}
+}
+
+func NewJoinSelect(targetTable string,targetAlias  string,filterCriteria interface{}) *JoinSelect {
+	return &JoinSelect{targetTable ,targetAlias  ,filterCriteria }
+}
 //SelectTableCommand represents a select from table query.
 type SelectTableCommand struct {
 	tableName            string
+	mainAlias string
 	tableColumnSelectors TableColumnSelectors
+	joinList []JoinSelect
+	whereExpression interface{}
+	groupBy  []GroupBySelect
 }
 
 //NewSelectTableCommand returns an instance of SelectTableCommand.
-func NewSelectTableCommand(tableName string) *SelectTableCommand {
-	return &SelectTableCommand{tableName: tableName}
+func NewSelectTableCommand(tableName string,mainAlias string,tableColumnSelectors TableColumnSelectors,joinList []JoinSelect,whereExpression interface{},groupBy  []GroupBySelect) *SelectTableCommand {
+	return &SelectTableCommand{tableName,mainAlias,tableColumnSelectors,joinList,whereExpression,groupBy}
 }
 
 //SourceTable returns the sourceTable of the table in which the values will be inserted.
