@@ -1,6 +1,8 @@
 package common
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type tableModifier interface {
 	TableName() string
@@ -134,16 +136,16 @@ type TableColumnSelectors []interface{}
 
 //TableColumnSelector represents a selected column in a select query.
 type TableColumnSelector struct {
-	isStar bool
+	isStar     bool
 	prefix     string
 	columnName string
 	alias      string
-	function interface{}
+	function   interface{}
 }
 
 //NewTableColumnSelector creates an instance of a TableColumnSelector.
-func NewTableColumnSelector(isStar bool,prefix string, columnName string, alias string,function interface{}) *TableColumnSelector {
-	return &TableColumnSelector{isStar,prefix, columnName, alias,function}
+func NewTableColumnSelector(isStar bool, prefix string, columnName string, alias string, function interface{}) *TableColumnSelector {
+	return &TableColumnSelector{isStar, prefix, columnName, alias, function}
 }
 
 //Prefix returns the column prefix and returns true if it isn't empty.
@@ -170,43 +172,56 @@ func NewTableColumnStarSelector() *TableColumnStarSelector {
 	return &TableColumnStarSelector{}
 }
 
-
-type GroupBySelect struct{
-	table string
-	column  string
+type GroupBySelect struct {
+	table  string
+	column string
 }
 
 //NewTableColumnSelector creates an instance of a TableColumnSelector.
-func NewGroupBySelect(table string,column  string) *GroupBySelect {
-	return &GroupBySelect{table ,column}
+func NewGroupBySelect(table string, column string) *GroupBySelect {
+	return &GroupBySelect{table, column}
 }
+
 type JoinSelect struct {
-	targetTable string
-	targetAlias string
+	targetTable    string
+	targetAlias    string
 	filterCriteria interface{}
 }
 
-func NewJoinSelect(targetTable string,targetAlias  string,filterCriteria interface{}) *JoinSelect {
-	return &JoinSelect{targetTable ,targetAlias  ,filterCriteria }
+func NewJoinSelect(targetTable string, targetAlias string, filterCriteria interface{}) *JoinSelect {
+	return &JoinSelect{targetTable, targetAlias, filterCriteria}
 }
+
 //SelectTableCommand represents a select from table query.
 type SelectTableCommand struct {
 	tableName            string
-	mainAlias string
+	mainAlias            string
 	tableColumnSelectors TableColumnSelectors
-	joinList []JoinSelect
-	whereExpression interface{}
-	groupBy  []GroupBySelect
+	joinList             []JoinSelect
+	whereExpression      Expression
+	groupBy              []GroupBySelect
 }
 
 //NewSelectTableCommand returns an instance of SelectTableCommand.
-func NewSelectTableCommand(tableName string,mainAlias string,tableColumnSelectors TableColumnSelectors,joinList []JoinSelect,whereExpression interface{},groupBy  []GroupBySelect) *SelectTableCommand {
-	return &SelectTableCommand{tableName,mainAlias,tableColumnSelectors,joinList,whereExpression,groupBy}
+func NewSelectTableCommand(tableName string, mainAlias string, tableColumnSelectors TableColumnSelectors, joinList []JoinSelect, whereExpression Expression, groupBy []GroupBySelect) *SelectTableCommand {
+	return &SelectTableCommand{tableName, mainAlias, tableColumnSelectors, joinList, whereExpression, groupBy}
 }
 
 //SourceTable returns the sourceTable of the table in which the values will be inserted.
 func (s SelectTableCommand) TableName() string {
 	return s.tableName
+}
+
+func (s SelectTableCommand) ProjectedColumns() TableColumnSelectors {
+	return s.tableColumnSelectors
+}
+
+func (s SelectTableCommand) Joins() []JoinSelect {
+	return s.joinList
+}
+
+func (s SelectTableCommand) Condition() interface{} {
+	return s.whereExpression
 }
 
 //InsertCommand represents an insert statement.
@@ -287,30 +302,34 @@ func NewAlterModifyInst(tableColumnDefiners TableColumnDefiner) *AlterModifyInst
 }
 
 type UpdateTableCommand struct {
-	tableName string
+	tableName   string
 	assignments []*AssignmentCommon
-	where interface{}
+	where       Expression
 }
 
 func (c UpdateTableCommand) TableName() string {
 	return c.tableName
 }
 
-func NewUpdateTableCommand(tableName string, assignments []*AssignmentCommon, where interface{}) *UpdateTableCommand{
+func NewUpdateTableCommand(tableName string, assignments []*AssignmentCommon, where Expression) *UpdateTableCommand {
 	return &UpdateTableCommand{tableName, assignments, where}
 }
 
 type DeleteCommand struct {
 	tableName string
-	alias string
-	where interface{}
+	alias     string
+	where     Expression
 }
 
-func NewDeleteTableCommand(tableName string, alias string, where interface{}) *DeleteCommand{
+func NewDeleteTableCommand(tableName string, alias string, where Expression) *DeleteCommand {
 	return &DeleteCommand{tableName, alias, where}
 }
 func (c DeleteCommand) TableName() string {
 	return c.tableName
+}
+
+func (c DeleteCommand) Condition() interface{} {
+	return c.where
 }
 
 //Instruction executes the command.
@@ -358,209 +377,4 @@ func NewCommand(tableModifier tableModifier, instructionType InstructionType, in
 func (c Command) String() string {
 	return fmt.Sprintf("%s %s", c.InstructionType.String(), c.tableModifier.TableName())
 
-}
-
-type IdCommon struct {
-	name  string
-	alias string
-}
-
-func NewIdCommon(tableName string, alias string) *IdCommon {
-	return &IdCommon{tableName, alias}
-}
-
-type IntCommon struct {
-	value int64
-}
-
-func NewIntCommon(value int64) *IntCommon {
-	return &IntCommon{value}
-}
-
-type BoolCommon struct {
-	value bool
-}
-
-func NewBoolCommon(value bool) *BoolCommon {
-	return &BoolCommon{value}
-}
-
-type FloatCommon struct {
-	value float64
-}
-
-func NewFloatCommon(value float64) *FloatCommon {
-	return &FloatCommon{value}
-}
-
-type StringCommon struct {
-	value string
-}
-
-func NewStringCommon(value string) *StringCommon {
-	return &StringCommon{value}
-}
-
-type AssignmentCommon struct {
-	value      string
-	expression interface{}
-}
-
-func NewAssignmentCommon(value string, expression interface{}) *AssignmentCommon {
-	return &AssignmentCommon{value, expression}
-}
-
-type SumCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewSumCommon(value interface{}, expression interface{}) *SumCommon {
-	return &SumCommon{value, expression}
-}
-
-type SubCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewSubCommon(value interface{}, expression interface{}) *SubCommon {
-	return &SubCommon{value, expression}
-}
-
-type MultCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewMultCommon(value interface{}, expression interface{}) *MultCommon {
-	return &MultCommon{value, expression}
-}
-
-type DivCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewDivCommon(value interface{}, expression interface{}) *DivCommon {
-	return &DivCommon{value, expression}
-}
-
-type EqCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewEqCommon(value interface{}, expression interface{}) *EqCommon {
-	return &EqCommon{value, expression}
-}
-
-type NeCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewNeCommon(value interface{}, expression interface{}) *NeCommon {
-	return &NeCommon{value, expression}
-}
-
-type LtCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewLtCommon(value interface{}, expression interface{}) *LtCommon {
-	return &LtCommon{value, expression}
-}
-
-type GtCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewGtCommon(value interface{}, expression interface{}) *GtCommon {
-	return &GtCommon{value, expression}
-}
-
-type LteCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewLteCommon(value interface{}, expression interface{}) *LteCommon {
-	return &LteCommon{value, expression}
-}
-
-type GteCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewGteCommon(value interface{}, expression interface{}) *GteCommon {
-	return &GteCommon{value, expression}
-}
-
-type BetweenCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewBetweenCommon(value interface{}, expression interface{}) *BetweenCommon {
-	return &BetweenCommon{value, expression}
-}
-
-type LikeCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewLikeCommon(value interface{}, expression interface{}) *LikeCommon {
-	return &LikeCommon{value, expression}
-}
-
-type NotCommon struct {
-	not interface{}
-}
-
-func NewNotCommon(value interface{}) *NotCommon {
-	return &NotCommon{value}
-}
-
-type AndCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewAndCommon(value interface{}, expression interface{}) *AndCommon {
-	return &AndCommon{value, expression}
-}
-
-type OrCommon struct {
-	rightValue interface{}
-	leftValue  interface{}
-}
-
-func NewOrCommon(value interface{}, expression interface{}) *OrCommon {
-	return &OrCommon{value, expression}
-}
-
-type NullCommon struct {
-}
-
-func NewNullCommon() *NullCommon {
-	return &NullCommon{}
-}
-
-type FalseCommon struct {
-}
-
-func NewFalseCommon() *FalseCommon {
-	return &FalseCommon{}
-}
-
-type TrueCommon struct {
-}
-
-func NewTrueCommon() *TrueCommon {
-	return &TrueCommon{}
 }
