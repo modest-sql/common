@@ -288,7 +288,7 @@ func NewAlterModifyInst(tableColumnDefiners TableColumnDefiner) *AlterModifyInst
 
 type UpdateTableCommand struct {
 	tableName string
-	assignments []AssignmentCommon
+	assignments []*AssignmentCommon
 	where interface{}
 }
 
@@ -296,7 +296,7 @@ func (c UpdateTableCommand) TableName() string {
 	return c.tableName
 }
 
-func NewUpdateTableCommand(tableName string, assignments []AssignmentCommon, where interface{}) *UpdateTableCommand{
+func NewUpdateTableCommand(tableName string, assignments []*AssignmentCommon, where interface{}) *UpdateTableCommand{
 	return &UpdateTableCommand{tableName, assignments, where}
 }
 
@@ -306,8 +306,8 @@ type DeleteCommand struct {
 	where interface{}
 }
 
-func NewDeleteTableCommand(tableName string, alias string, where interface{}) *DeleteTableCommand{
-	return &DeleteTableCommand{tableName, alias, where}
+func NewDeleteTableCommand(tableName string, alias string, where interface{}) *DeleteCommand{
+	return &DeleteCommand{tableName, alias, where}
 }
 func (c DeleteCommand) TableName() string {
 	return c.tableName
