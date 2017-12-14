@@ -155,7 +155,14 @@ func (s TableColumnSelector) Prefix() (string, bool) {
 
 //ColumnName returns the name of the selected column in a select query.
 func (s TableColumnSelector) ColumnName() string {
-	return s.columnName
+	if s.isStar {
+		return "*"
+	}
+
+	if s.prefix == "" {
+		return s.columnName
+	}
+	return fmt.Sprintf("%s.%s", s.prefix, s.columnName)
 }
 
 //Alias returns the column alias and returns true if it isn't empty.
@@ -185,10 +192,18 @@ func NewGroupBySelect(table string, column string) *GroupBySelect {
 type JoinSelect struct {
 	targetTable    string
 	targetAlias    string
-	filterCriteria interface{}
+	filterCriteria Expression
 }
 
-func NewJoinSelect(targetTable string, targetAlias string, filterCriteria interface{}) *JoinSelect {
+func (j JoinSelect) TargetTable() string {
+	return j.targetTable
+}
+
+func (j JoinSelect) FilterCriteria() Expression {
+	return j.filterCriteria
+}
+
+func NewJoinSelect(targetTable string, targetAlias string, filterCriteria Expression) *JoinSelect {
 	return &JoinSelect{targetTable, targetAlias, filterCriteria}
 }
 
@@ -220,7 +235,7 @@ func (s SelectTableCommand) Joins() []JoinSelect {
 	return s.joinList
 }
 
-func (s SelectTableCommand) Condition() interface{} {
+func (s SelectTableCommand) Condition() Expression {
 	return s.whereExpression
 }
 
@@ -328,7 +343,7 @@ func (c DeleteCommand) TableName() string {
 	return c.tableName
 }
 
-func (c DeleteCommand) Condition() interface{} {
+func (c DeleteCommand) Condition() Expression {
 	return c.where
 }
 
