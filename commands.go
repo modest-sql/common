@@ -322,8 +322,26 @@ type UpdateTableCommand struct {
 	where       Expression
 }
 
+func (c UpdateTableCommand) Values(symbols map[string]interface{}) map[string]interface{} {
+	values := map[string]interface{}{}
+
+	for _, assignment := range c.assignments {
+		values[assignment.value] = assignment.expression.Evaluate(symbols)
+	}
+
+	return values
+}
+
 func (c UpdateTableCommand) TableName() string {
 	return c.tableName
+}
+
+func (c UpdateTableCommand) Assignments() []*AssignmentCommon {
+	return c.assignments
+}
+
+func (c UpdateTableCommand) Condition() Expression {
+	return c.where
 }
 
 func NewUpdateTableCommand(tableName string, assignments []*AssignmentCommon, where Expression) *UpdateTableCommand {
