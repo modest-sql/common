@@ -19,10 +19,19 @@ func NewIdCommon(tableName string, alias string) *IdCommon {
 }
 
 func (id IdCommon) Evaluate(symbols map[string]interface{}) interface{} {
+	var key string
+
 	if id.alias == "" {
-		return symbols[id.name]
+		key = id.name
+	} else {
+		key = fmt.Sprintf("%s.%s", id.name, id.alias)
 	}
-	return symbols[fmt.Sprintf("%s.%s", id.name, id.alias)]
+
+	if value, ok := symbols[key]; ok {
+		return value
+	}
+
+	panic(fmt.Sprintf("Identifier `%s' does not exist", key))
 }
 
 type IntCommon struct {
