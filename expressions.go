@@ -106,14 +106,14 @@ func (s SumCommon) Evaluate(symbols map[string]interface{}) interface{} {
 		case int64:
 			return l + r
 		case float64:
-			return l + int64(r)
+			return float64(l) + r
 		default:
 			panic(fmt.Sprintf("Undefined + operator for types %v and %v", reflect.TypeOf(left), reflect.TypeOf(right)))
 		}
 	case float64:
 		switch r := right.(type) {
 		case int64:
-			return int64(l) + r
+			return l + float64(r)
 		case float64:
 			return l + r
 		default:
@@ -143,14 +143,14 @@ func (s SubCommon) Evaluate(symbols map[string]interface{}) interface{} {
 		case int64:
 			return l - r
 		case float64:
-			return l - int64(r)
+			return float64(l) - r
 		default:
 			panic(fmt.Sprintf("Undefined - operator for types %v and %v", reflect.TypeOf(left), reflect.TypeOf(right)))
 		}
 	case float64:
 		switch r := right.(type) {
 		case int64:
-			return int64(l) - r
+			return l - float64(r)
 		case float64:
 			return l - r
 		default:
@@ -180,14 +180,14 @@ func (m MultCommon) Evaluate(symbols map[string]interface{}) interface{} {
 		case int64:
 			return l * r
 		case float64:
-			return l * int64(r)
+			return float64(l) * r
 		default:
 			panic(fmt.Sprintf("Undefined * operator for types %v and %v", reflect.TypeOf(left), reflect.TypeOf(right)))
 		}
 	case float64:
 		switch r := right.(type) {
 		case int64:
-			return int64(l) * r
+			return l * float64(r)
 		case float64:
 			return l * r
 		default:
@@ -221,14 +221,14 @@ func (d DivCommon) Evaluate(symbols map[string]interface{}) interface{} {
 		case int64:
 			return l / r
 		case float64:
-			return l / int64(r)
+			return float64(l) / r
 		default:
 			panic(fmt.Sprintf("Undefined / operator for types %v and %v", reflect.TypeOf(left), reflect.TypeOf(right)))
 		}
 	case float64:
 		switch r := right.(type) {
 		case int64:
-			return int64(l) / r
+			return l / float64(r)
 		case float64:
 			return l / r
 		default:
@@ -280,14 +280,14 @@ func (lt LtCommon) Evaluate(symbols map[string]interface{}) interface{} {
 		case int64:
 			return l < r
 		case float64:
-			return l < int64(r)
+			return float64(l) < r
 		default:
 			panic(fmt.Sprintf("Undefined < operator for types %v and %v", reflect.TypeOf(left), reflect.TypeOf(right)))
 		}
 	case float64:
 		switch r := right.(type) {
 		case int64:
-			return int64(l) < r
+			return l < float64(r)
 		case float64:
 			return l < r
 		default:
@@ -317,14 +317,14 @@ func (gt GtCommon) Evaluate(symbols map[string]interface{}) interface{} {
 		case int64:
 			return l > r
 		case float64:
-			return l > int64(r)
+			return float64(l) > r
 		default:
 			panic(fmt.Sprintf("Undefined > operator for types %v and %v", reflect.TypeOf(left), reflect.TypeOf(right)))
 		}
 	case float64:
 		switch r := right.(type) {
 		case int64:
-			return int64(l) > r
+			return l > float64(r)
 		case float64:
 			return l > r
 		default:
@@ -358,14 +358,14 @@ func (lte LteCommon) Evaluate(symbols map[string]interface{}) interface{} {
 		case int64:
 			return l <= r
 		case float64:
-			return l <= int64(r)
+			return float64(l) <= r
 		default:
 			panic(fmt.Sprintf("Undefined <= operator for types %v and %v", reflect.TypeOf(left), reflect.TypeOf(right)))
 		}
 	case float64:
 		switch r := right.(type) {
 		case int64:
-			return int64(l) <= r
+			return l <= float64(r)
 		case float64:
 			return l <= r
 		default:
@@ -391,14 +391,14 @@ func (gte GteCommon) Evaluate(symbols map[string]interface{}) interface{} {
 		case int64:
 			return l >= r
 		case float64:
-			return l >= int64(r)
+			return float64(l) >= r
 		default:
 			panic(fmt.Sprintf("Undefined >= operator for types %v and %v", reflect.TypeOf(left), reflect.TypeOf(right)))
 		}
 	case float64:
 		switch r := right.(type) {
 		case int64:
-			return int64(l) >= r
+			return l >= float64(r)
 		case float64:
 			return l >= r
 		default:
@@ -432,7 +432,7 @@ type LikeCommon struct {
 }
 
 func (l LikeCommon) Evaluate(symbols map[string]interface{}) interface{} {
-	panic("BETWEEN operator not implemented")
+	panic("LIKE operator not implemented")
 }
 
 func NewLikeCommon(value Expression, expression Expression) *LikeCommon {
